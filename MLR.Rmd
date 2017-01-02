@@ -16,15 +16,22 @@ rm(list=ls())
 library(rmarkdown)
 rmarkdown::pandoc_available()
 options(bitmapType='cairo')
-rmarkdown::render("/Users/sfurlan/Dropbox (Kean Lab)/People/Scott Furlan/Presentations/Weekly Scientific Meeting/170110/MLR.Rmd")
-```
-
-```{r, eval=FALSE, echo=FALSE}
 setwd("~")
-if(any(strsplit(Sys.info()[4], "\\.")[[1]] %in% "washington")){ROOT_DIR="~/"} else (ROOT_DIR="~/share0/Lab Members/Scott/AWS/Scott/")
-if(any(strsplit(Sys.info()[4], "\\.")[[1]] %in% "MacDude")){ROOT_DIR="/Volumes/UW/"}
+str<-strsplit(Sys.info()[4], "\\.")[[1]]
+if(any(str %in% "washington")){loc="UW"} else {loc="SCRI"}
+if(any(str %in% "MacDude")){loc = "local"}
+switch(loc, UW={ROOT_DIR="~"}, 
+			SCRI={ROOT_DIR="~/share0/Lab Members/Scott/AWS/Scott"}, 
+			local={ROOT_DIR="/Volumes/UW"})
+folder<-"170110"
+RMD_DIR=paste(file.path(ROOT_DIR, "Analysis", "presentations", folder))
+file<-"MLR.Rmd"
+#rmarkdown::render("/Users/sfurlan/Dropbox (Kean Lab)/People/Scott Furlan/Presentations/Weekly Scientific Meeting/170110/MLR.Rmd")
+rmarkdown::render(file.path(RMD_DIR, file))
 key<-"Jan2017"
 ```
+
+
 ## Central Dogma of T cell activation may be too simplistic
 
 - T cell activation is dependent on 3 signals
@@ -92,10 +99,13 @@ key<-"Jan2017"
 </object>
 </div>
 
-## The MLR through the lens of single-cell RNA-seq
-- Dividing T cells will dilute out the green label (CFSE) and can be quantified flow cytometrically
+## Primary experimental question {.flexbox .vcenter}
 
 <div style="text-align:center">
+How can single cell RNA seq performed on cells from an MLR inform us of the transcriptional events that define alloproliferation?
+<br>
+<br>
+<br>
 <img src="Images/Substack-4455-4504.gif" width="640px" height="160px"/>
 </div>
 
@@ -103,12 +113,123 @@ key<-"Jan2017"
 
 > - Three donors were utilized (A, B, C)
 > - MLR was set up using each donor as a responder on each other donor (e.g A on B, A on C, B on A, B on C)
-> - Controls included T cells cultured with anti-CD3/anti-CD28 microbeads
+> - Controls included T cells cultured with anti-CD3/anti-CD28 microbeads and T cells cultures with autologous controls
 > - Cells were harvested and sorted by CFSE dilution (e.g. Division 0, Division 1, ...  Division 4)
-> - 
+> - Cells were droplet partitioned and mRNA libraries created using the 10X genomics platform
 
-```{r, echo=FALSE, eval=FALSE}
-source("~/Analysis/presentations/161230LoadMLR.R")
+## Slide on dimensions of data
+
+## Slide on tSNE math
+
+## Slide on tSNE springs {.flexbox .vcenter}
+<!-- <head>
+<script>
+  function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+  }
+</script>
+</head>
+<div style="text-align:center">
+<iframe src="Images/springs.html" name="targetframe" allowTransparency="true" scrolling="no" frameborder="0" width="1200" onload="resizeIframe(this)">
+</iframe>
+</div> -->
+<div style="text-align:center">
+<object type="text/html" data="Images/springs.html" width="1200" height="600"></object>
+</div>
+
+## Slide on tSNE results {.flexbox .vcenter}
+<div style="text-align:center">
+The end result
+<br>
+<img style="border:1px solid grey;" src="Images/tSNE.gif" height="480px" width="480px"/>
+</div>
+
+## Using conventional "flow" markers is not tractable {.flexbox .vcenter}
+
+```{r, echo=FALSE, include=FALSE, eval=F}
+loadfile<-"161230LoadMLR.R"
+#Load, reduceDim, cluster on mixSVM
+subkey<-"SVM"
+source(file.path(RMD_DIR, loadfile))
+```
+```{r, echo=FALSE, eval=F, fig.align='center', warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.height=5.5, fig.width=8}
+
+	dir.create(file.path(RES_DIR, subkey), showWarnings=F)
+
+	#mixS_C <- classifyCells(mixS, cthSVM, 0.05)
+	# mix<-estimateSizeFactors(mix)
+	# mix<-estimateDispersions(mix, cores=detectCores()/2)
+	# disp_vals <- dispersionTable(mix)
+	# high_disp_genes <- subset(disp_vals,  dispersion_empirical > 1.7 * dispersion_fit &  mean_expression > 1.5e-2 )
+	# top_genes <- as.character(high_disp_genes$gene_id)[order(high_disp_genes$dispersion_empirical, decreasing = T) < 1000]
+	# mix <- setOrderingFilter(mix, top_genes)
+	# mix_C_Enr <- classifyCells(mix, cthSVM, 0.05)
+	#
+	# saveRDS(mix_C_Enr, file.path(RES_DIR, "mix_C_Enr.RDS"))
+	#mix_C_Enr<-readRDS(file.path(RES_DIR, "mix_C_Enr.RDS"))
+	# mix_C_SVM<-classifyCellsSVM(mix, cthSVM, c("CD4s", "CD8s", "Bcells", "Monos", "NKs"), verbose=TRUE, number_training = 500)
+	#pData(mix_C_SVM)$CellTypeENR<-pData(mix_C_Enr)$CellType
+	# table(pData(mix_C_Enr)$CellType)
+	# table(pData(mix_C_SVM)$CellTypeSVM)
+	# colnames(pData(mix_C_SVM))
+	# cell_type_colors1 <- c("B cell"=colors[14], "CD4+ T cell"=colors[11], "CD8+ T cell"=colors[9], 
+	#   "Monocyte"=colors[6],  "NK cell"=colors[5], "Unknown"=colors[1], "T cell"=colors[2], "Dendritic Cell" = colors[4], "Ambiguous"="grey")
+	cell_type_colors <- c("Bcells"=colors[14], "CD4s"=colors[11], "CD8s"=colors[9], 
+	  "Monos"=colors[6], "CD34s"=colors[12], "NKs"=colors[5], "Unknown"=colors[1], "CD3s"=colors[2], "Ambiguous"="grey")
+	# pcve<-plot_pc_variance_explained(mix_C_SVM)
+	# pdf(file.path(RES_DIR, subkey, "PCAVarianceExplainedSVM.pdf"))
+	# plot(pcve$prop_varex[1:50])
+	# dev.off()
+	# mix_C_SVM<-reduceDimension(mix_C_SVM,
+	#                             max_components=2, reduction_method = "tSNE",
+	#                             num_dim=7,
+	#                             verbose=F)
+
+	# mix_C_SVM <- clusterCells_Density_Peak(mix_C_SVM,
+	#                             verbose=F, 
+	#                             inspect_rho_sigma=F,
+	#                                    rho_threshold = NULL,
+	#                             delta_threshold = NULL)
+	# pdf(file.path(RES_DIR, subkey, "DecisionPlot.pdf"))
+	# plot_rho_delta(mix_C_SVM)
+	# dev.off()
+	cluster_colors<-c(brewer.pal(12, "Paired"), brewer.pal(8, "Dark2"), brewer.pal(8, "Accent"))
+	# rt<-700
+	# dt<-4
+	# et<-2
+	# ft<-NULL
+	# mix_C_SVM <- clusterCells_Density_Peak(mix_C_SVM,
+	#                             rho_threshold=rt,
+	#                             delta_threshold=dt,
+	#                             cell_type_hierarchy=NULL,
+	#                             verbose=F,
+	#                             frequency_thresh=ft,
+	#                             enrichment_thresh=et)
+	# saveRDS(mix_C_SVM, file.path(RES_DIR, "mix_C_SVM.RDS"))
+#pdf(file.path(RES_DIR, "Slideplots.pdf"))
+plot<-plot_cell_clustersSF(mix_C_SVM, 1, 2,
+        color_by="CellTypeENR",
+        alpha=0.7,
+        show_density=F,
+        cell_size=0.7) +
+        theme(legend.position="right") +
+        scale_color_manual(values=cell_type_colors, guide = guide_legend(title = "Cell Type"))
+print(plot)
+#dev.off()
 ```
 
 
+
+##SVM works {.flexbox .vcenter}
+
+```{r, echo=FALSE, eval=F, fig.align='center', warning=FALSE, message=FALSE, dev.args = list(bg = 'transparent'), fig.height=5.5, fig.width=8}
+#pdf(file.path(RES_DIR, "Slideplots.pdf"))
+plot<-plot_cell_clustersSF(mix_C_SVM, 1, 2,
+        color_by="CellTypeSVM",
+        alpha=0.7,
+        show_density=F,
+        cell_size=0.7) +
+        theme(legend.position="right") +
+        scale_color_manual(values=cell_type_colors, guide = guide_legend(title = "Cell Type SVM"))
+print(plot)
+#dev.off()

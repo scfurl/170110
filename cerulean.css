@@ -432,7 +432,8 @@ h1,
 }
 h2,
 .h2 {
-    font-size: 30px
+    font-size: 30px;
+    text-align: center;
 }
 h3,
 .h3 {
