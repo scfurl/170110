@@ -16,15 +16,21 @@ rm(list=ls())
 library(rmarkdown)
 rmarkdown::pandoc_available()
 options(bitmapType='cairo')
-rmarkdown::render("/Users/sfurlan/Dropbox (Kean Lab)/People/Scott Furlan/Presentations/Weekly Scientific Meeting/170110/MLR.Rmd")
-```
-
-```{r, eval=FALSE, echo=FALSE}
 setwd("~")
-if(any(strsplit(Sys.info()[4], "\\.")[[1]] %in% "washington")){ROOT_DIR="~/"} else (ROOT_DIR="~/share0/Lab Members/Scott/AWS/Scott/")
-if(any(strsplit(Sys.info()[4], "\\.")[[1]] %in% "MacDude")){ROOT_DIR="/Volumes/UW/"}
+str<-strsplit(Sys.info()[4], "\\.")[[1]]
+if(any(str %in% "washington")){loc="UW"} else {loc="SCRI"}
+if(any(str %in% "MacDude")){loc = "local"}
+switch(loc, UW={ROOT_DIR="~"}, 
+			SCRI={ROOT_DIR="~/share0/Lab Members/Scott/AWS/Scott"}, 
+			local={ROOT_DIR="/Volumes/UW"})
+folder<-"170110"
+RMD_DIR=paste(file.path(ROOT_DIR, "Analysis", "presentations", folder))
+file<-"MLR.Rmd"
+#rmarkdown::render("/Users/sfurlan/Dropbox (Kean Lab)/People/Scott Furlan/Presentations/Weekly Scientific Meeting/170110/MLR.Rmd")
+rmarkdown::render(file.path(RMD_DIR, file))
 key<-"Jan2017"
 ```
+
 ## Central Dogma of T cell activation may be too simplistic
 
 - T cell activation is dependent on 3 signals
@@ -92,10 +98,13 @@ key<-"Jan2017"
 </object>
 </div>
 
-## The MLR through the lens of single-cell RNA-seq
-- Dividing T cells will dilute out the green label (CFSE) and can be quantified flow cytometrically
+## Primary experimental question {.flexbox .vcenter}
 
 <div style="text-align:center">
+How can single cell RNA seq performed on cells from an MLR inform us of the transcriptional events that define alloproliferation?
+<br>
+<br>
+<br>
 <img src="Images/Substack-4455-4504.gif" width="640px" height="160px"/>
 </div>
 
