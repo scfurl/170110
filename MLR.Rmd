@@ -1,0 +1,114 @@
+---
+title: "Dissecting the mechanics of alloproliferation with single cell RNA-seq"
+author: "Scott Furlan"
+date: "January 10, 2016"
+output: ioslides_presentation
+css: cerulean.css
+fig_retina: 2
+width: 1440
+height: 900
+smaller: true
+widescreen: true
+---
+
+```{r, eval=FALSE, echo=FALSE}
+rm(list=ls())
+library(rmarkdown)
+rmarkdown::pandoc_available()
+options(bitmapType='cairo')
+rmarkdown::render("/Users/sfurlan/Dropbox (Kean Lab)/People/Scott Furlan/Presentations/Weekly Scientific Meeting/170110/MLR.Rmd")
+```
+
+```{r, eval=FALSE, echo=FALSE}
+setwd("~")
+if(any(strsplit(Sys.info()[4], "\\.")[[1]] %in% "washington")){ROOT_DIR="~/"} else (ROOT_DIR="~/share0/Lab Members/Scott/AWS/Scott/")
+if(any(strsplit(Sys.info()[4], "\\.")[[1]] %in% "MacDude")){ROOT_DIR="/Volumes/UW/"}
+key<-"Jan2017"
+```
+## Central Dogma of T cell activation may be too simplistic
+
+- T cell activation is dependent on 3 signals
+	
+<div style="position: absolute; left: 40px; bottom: 00px; z-index:0">
+<object type="image/svg+xml" data="Images/A1.svg" width="1020px" height="420px">
+  Your browser does not support SVG
+</object>
+</div>
+
+
+## Central Dogma of T cell activation may be too simplistic
+
+- The actuality is that the biology of GVHD is likely much more complex
+
+<div style="position: absolute; left: 40px; bottom: 00px; z-index:0">
+<object type="image/svg+xml" data="Images/A2.svg" width="1020px" height="420px">
+  Your browser does not support SVG
+</object>
+</div>
+
+
+## A Mixed Lymphocyte Reaction (MLR) is our best *in vitro* model of this complexity {.smaller}
+
+- PBMCS from two donors, irradiate one fraction and label other
+
+<div style="position: absolute; left: 40px; bottom: 00px; z-index:0">
+<object type="image/svg+xml" data="Images/B1.svg" width="1020px" height="420px">
+  Your browser does not support SVG
+</object>
+</div>
+
+## A Mixed Lymphocyte Reaction (MLR) is our best *in vitro* model of this complexity {.smaller}
+
+- PBMCS from two donors, irradiate one fraction and label other
+- Mix together
+
+<div style="position: absolute; left: 40px; bottom: 00px; z-index:0">
+<object type="image/svg+xml" data="Images/B2.svg" width="1020px" height="420px">
+  Your browser does not support SVG
+</object>
+</div>
+## A Mixed Lymphocyte Reaction (MLR) is our best *in vitro* model of this complexity {.smaller}
+
+- PBMCS from two donors, irradiate one fraction and label other
+- Mix together
+- Allow alloactivation of T cells to proceed over the following 3-5 days
+
+<div style="position: absolute; left: 40px; bottom: 00px; z-index:0">
+<object type="image/svg+xml" data="Images/B3.svg" width="1020px" height="420px">
+  Your browser does not support SVG
+</object>
+</div>
+
+## A Mixed Lymphocyte Reaction (MLR) is our best *in vitro* model of this complexity {.smaller}
+
+- PBMCS from two donors, irradiate one fraction and label other
+- Mix together
+- Allow alloactivation of T cells to proceed over the following 3-5 days
+- Dividing T cells will dilute out the green label (CFSE) and can be quantified flow cytometrically
+
+<div style="position: absolute; left: 40px; bottom: 00px; z-index:0">
+<object type="image/svg+xml" data="Images/B4.svg" width="1020px" height="420px">
+  Your browser does not support SVG
+</object>
+</div>
+
+## The MLR through the lens of single-cell RNA-seq
+- Dividing T cells will dilute out the green label (CFSE) and can be quantified flow cytometrically
+
+<div style="text-align:center">
+<img src="Images/Substack-4455-4504.gif" width="640px" height="160px"/>
+</div>
+
+## Overview of experiment
+
+> - Three donors were utilized (A, B, C)
+> - MLR was set up using each donor as a responder on each other donor (e.g A on B, A on C, B on A, B on C)
+> - Controls included T cells cultured with anti-CD3/anti-CD28 microbeads
+> - Cells were harvested and sorted by CFSE dilution (e.g. Division 0, Division 1, ...  Division 4)
+> - 
+
+```{r, echo=FALSE, eval=FALSE}
+source("~/Analysis/presentations/161230LoadMLR.R")
+```
+
+
