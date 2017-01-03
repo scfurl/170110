@@ -31,7 +31,10 @@ rmarkdown::render(file.path(RMD_DIR, file))
 key<-"Jan2017"
 ```
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 620ffaaa45b4250777488c9b78b11e1796413ae2
 ## Central Dogma of T cell activation may be too simplistic
 
 - T cell activation is dependent on 3 signals
